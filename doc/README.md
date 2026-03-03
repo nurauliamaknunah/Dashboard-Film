@@ -1,1 +1,5 @@
-Dokumentasi ERD dan skema tabel akan ada di folder ini.
+## Database ERD
+
+Diagram Entity Relationship untuk database film.
+
+![ERD](doc/ERD%20FIX.png)
