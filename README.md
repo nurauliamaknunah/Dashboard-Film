@@ -12,6 +12,6 @@ Dashboard-Film/
 ├── connection/
 │   └── File Koneksi
 ├── doc/
-│   └── erd.pdf
+│   └── erd.png
 ├── images/
 └── README.md
