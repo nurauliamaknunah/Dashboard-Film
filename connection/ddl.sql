@@ -2,92 +2,97 @@
 -- DDL Database Film (Revisi 3NF)
 -- ==================================================
 
-DROP TABLE IF EXISTS film_genres;
-DROP TABLE IF EXISTS film_actors;
-DROP TABLE IF EXISTS film_directors;
-DROP TABLE IF EXISTS reviews;
-DROP TABLE IF EXISTS genres;
-DROP TABLE IF EXISTS actors;
-DROP TABLE IF EXISTS directors;
-DROP TABLE IF EXISTS films;
-DROP TABLE IF EXISTS users;
+CREATE DATABASE IF NOT EXISTS db_bioskop;
+USE db_bioskop;
 
+-- USERS
 CREATE TABLE users (
-  username VARCHAR(255) PRIMARY KEY,
-  city_origin VARCHAR(100),
-  date_of_birth DATE
-) ENGINE=InnoDB;
+    username VARCHAR(100) PRIMARY KEY,
+    date_of_birth DATE,
+    city_origin VARCHAR(100)
+);
 
+-- FILMS
 CREATE TABLE films (
-  imdb_id VARCHAR(50) PRIMARY KEY,
-  title VARCHAR(255),
-  duration_min INT,
-  release_date DATE,
-  rating_imdb DECIMAL(3,1),
-  rating_count INT,
-  storyline TEXT,
-  certificates TEXT,
-  production_companies TEXT,
-  url_poster TEXT,
-  imdb_url_film TEXT
-) ENGINE=InnoDB;
+    imdb_id VARCHAR(20) PRIMARY KEY,
+    title VARCHAR(255),
+    rating_imdb FLOAT,
+    rating_count INT,
+    storyline TEXT,
+    certificates TEXT,
+    release_date DATE,
+    duration_min INT,
+    imdb_url_film TEXT,
+    url_poster TEXT
+);
 
+-- REVIEWS
 CREATE TABLE reviews (
-  review_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  imdb_id VARCHAR(50) NOT NULL,
-  username VARCHAR(255) NOT NULL,
-  imdb_url_review TEXT,
-  review_date DATE,
-  review_summary VARCHAR(255),
-  review_content TEXT,
-  rating_user DECIMAL(3,1),
-  FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
-  FOREIGN KEY (username) REFERENCES users(username),
-  UNIQUE KEY uq_review_nodup (imdb_id, username, review_date, review_summary)
-) ENGINE=InnoDB;
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    imdb_id VARCHAR(20),
+    username VARCHAR(100),
+    imdb_url_review TEXT,
+    review_date DATE,
+    review_summary TEXT,
+    review_content TEXT,
+    FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
+    FOREIGN KEY (username) REFERENCES users(username)
+);
 
+-- ACTORS
 CREATE TABLE actors (
-  actor_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  actor_name VARCHAR(255) NOT NULL,
-  UNIQUE KEY uq_actor_name (actor_name)
-) ENGINE=InnoDB;
+    actor_id INT AUTO_INCREMENT PRIMARY KEY,
+    actor_name VARCHAR(255) UNIQUE
+);
 
+-- DIRECTORS
 CREATE TABLE directors (
-  director_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  director_name VARCHAR(255) NOT NULL,
-  UNIQUE KEY uq_director_name (director_name)
-) ENGINE=InnoDB;
+    director_id INT AUTO_INCREMENT PRIMARY KEY,
+    director_name VARCHAR(255) UNIQUE
+);
 
+-- GENRES
 CREATE TABLE genres (
-  genre_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  genre_name VARCHAR(100) NOT NULL,
-  UNIQUE KEY uq_genre_name (genre_name)
-) ENGINE=InnoDB;
+    genre_id INT AUTO_INCREMENT PRIMARY KEY,
+    genre_name VARCHAR(100) UNIQUE
+);
+
+-- PRODUCTION COMPANIES
+CREATE TABLE production_companies (
+    company_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(255) UNIQUE
+);
+
+-- RELATION TABLES
 
 CREATE TABLE film_actors (
-  imdb_id VARCHAR(50) NOT NULL,
-  actor_id BIGINT NOT NULL,
-  PRIMARY KEY (imdb_id, actor_id),
-  FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
-  FOREIGN KEY (actor_id) REFERENCES actors(actor_id)
-) ENGINE=InnoDB;
+    imdb_id VARCHAR(20),
+    actor_id INT,
+    PRIMARY KEY (imdb_id, actor_id),
+    FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
+    FOREIGN KEY (actor_id) REFERENCES actors(actor_id)
+);
 
 CREATE TABLE film_directors (
-  imdb_id VARCHAR(50) NOT NULL,
-  director_id BIGINT NOT NULL,
-  PRIMARY KEY (imdb_id, director_id),
-  FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
-  FOREIGN KEY (director_id) REFERENCES directors(director_id)
-) ENGINE=InnoDB;
+    imdb_id VARCHAR(20),
+    director_id INT,
+    PRIMARY KEY (imdb_id, director_id),
+    FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
+    FOREIGN KEY (director_id) REFERENCES directors(director_id)
+);
 
 CREATE TABLE film_genres (
-  imdb_id VARCHAR(50) NOT NULL,
-  genre_id BIGINT NOT NULL,
-  PRIMARY KEY (imdb_id, genre_id),
-  FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
-  FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
-) ENGINE=InnoDB;
+    imdb_id VARCHAR(20),
+    genre_id INT,
+    PRIMARY KEY (imdb_id, genre_id),
+    FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+);
 
-CREATE INDEX idx_reviews_imdb ON reviews(imdb_id);
-CREATE INDEX idx_reviews_user ON reviews(username);
-CREATE INDEX idx_films_release ON films(release_date);
+CREATE TABLE film_production_companies (
+    imdb_id VARCHAR(20),
+    company_id INT,
+    PRIMARY KEY (imdb_id, company_id),
+    FOREIGN KEY (imdb_id) REFERENCES films(imdb_id),
+    FOREIGN KEY (company_id) REFERENCES production_companies(company_id)
+);
