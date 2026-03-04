@@ -21,8 +21,8 @@ SELECT
 FROM films f
 JOIN reviews r ON f.imdb_id = r.imdb_id
 GROUP BY f.imdb_id, f.title, f.rating_imdb
-HAVING Jumlah_Review >= 100
-ORDER BY Rating_IMDb DESC
+HAVING COUNT(r.review_id) >= 100
+ORDER BY f.rating_imdb DESC
 LIMIT 5;
 
 -- 6 & 7. Analisis Sinopsis
@@ -33,19 +33,19 @@ SELECT rating_imdb AS rating FROM films WHERE rating_imdb IS NOT NULL;
 
 -- 9. Distribusi Tahun Rilis
 SELECT 
-  YEAR(release_date) AS tahun_rilis, 
+  YEAR(STR_TO_DATE(release_date, '%Y-%m-%d')) AS tahun_rilis,
   COUNT(imdb_id) AS jumlah_film
 FROM films
-WHERE release_date IS NOT NULL
+WHERE release_date IS NOT NULL AND release_date <> ''
 GROUP BY tahun_rilis
 ORDER BY tahun_rilis ASC;
 
 -- 10. Klasifikasi Usia Penonton
 SELECT 
   CASE 
-    WHEN (YEAR(CURDATE()) - YEAR(date_of_birth)) < 17 THEN 'Anak-anak (<17)'
-    WHEN (YEAR(CURDATE()) - YEAR(date_of_birth)) BETWEEN 17 AND 25 THEN 'Remaja (17-25)'
-    WHEN (YEAR(CURDATE()) - YEAR(date_of_birth)) BETWEEN 26 AND 40 THEN 'Dewasa Muda (26-40)'
+    WHEN TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) < 17 THEN 'Anak-anak (<17)'
+    WHEN TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) BETWEEN 17 AND 25 THEN 'Remaja (17-25)'
+    WHEN TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) BETWEEN 26 AND 40 THEN 'Dewasa Muda (26-40)'
     ELSE 'Dewasa (>40)'
   END AS kategori_usia,
   COUNT(username) AS jumlah_user
