@@ -1,17 +1,1 @@
 # Dashboard-Film
-### 📂 Struktur Folder Proyek
-```text
-Dashboard-Film/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── app/
-│   ├── app.R
-│   ├── ui.R
-│   └── server.R
-├── connection/
-│   └── File Koneksi
-├── doc/
-│   └── erd.png
-├── images/
-└── README.md
