@@ -1,0 +1,28 @@
+# Jalankan schema connection/ddl.sql terlebih dahulu di MySQL
+source("connection/db_connection.R")
+
+users <- read.csv("data/processed/users.csv", stringsAsFactors = FALSE)
+films <- read.csv("data/processed/films.csv", stringsAsFactors = FALSE)
+reviews <- read.csv("data/processed/reviews.csv", stringsAsFactors = FALSE)
+actors <- read.csv("data/processed/actors.csv", stringsAsFactors = FALSE)
+directors <- read.csv("data/processed/directors.csv", stringsAsFactors = FALSE)
+genres <- read.csv("data/processed/genres.csv", stringsAsFactors = FALSE)
+production_companies <- read.csv("data/processed/production_companies.csv", stringsAsFactors = FALSE)
+film_actors <- read.csv("data/processed/film_actors.csv", stringsAsFactors = FALSE)
+film_directors <- read.csv("data/processed/film_directors.csv", stringsAsFactors = FALSE)
+film_genres <- read.csv("data/processed/film_genres.csv", stringsAsFactors = FALSE)
+film_production_companies <- read.csv("data/processed/film_production_companies.csv", stringsAsFactors = FALSE)
+
+dbWriteTable(con, "users", users, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "films", films, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "reviews", reviews, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "actors", actors, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "directors", directors, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "genres", genres, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "production_companies", production_companies, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "film_actors", film_actors, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "film_directors", film_directors, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "film_genres", film_genres, append = TRUE, row.names = FALSE)
+dbWriteTable(con, "film_production_companies", film_production_companies, append = TRUE, row.names = FALSE)
+
+dbDisconnect(con)
