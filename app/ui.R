@@ -1,22 +1,21 @@
 library(shiny)
 library(shinydashboard)
-library(DBI)
-library(RMySQL)
-library(tidyverse)
+library(RMariaDB)
+library(dplyr)
+library(tidyr)
+library(stringr)
 library(plotly)
 library(DT)
-library(wordcloud2)
-library(lubridate)
-library(digest)
-library(dplyr)
 library(ggplot2)
+library(wordcloud)
+library(wordcloud2)
+library(tm)
 
 
 
-# --- 2. UI Section ---
 ui <- dashboardPage(
   skin = "black",
-  dashboardHeader(title = "Film Analytics Dashboard"),
+  dashboardHeader(title = "POPCORN 🎬"),
   
   dashboardSidebar(
     sidebarMenu(
@@ -27,177 +26,158 @@ ui <- dashboardPage(
       menuItem("Content Analysis", tabName = "content", icon = icon("align-left")),
       menuItem("Variable Relations", tabName = "relations", icon = icon("chart-line"))
     ),
+    
     hr(),
-    # GLOBAL FILTERS
-    selectInput("select_genre", "Pilih Genre:", 
-                choices = c("All", unique(df_genre_long$genre_single)), selected = "All"),
-    sliderInput("select_rating", "Rentang Rating:", 
-                min = 0, max = 10, value = c(0, 10), step = 0.5)
+    
+    selectInput("select_genre", "Pilih Genre:", choices = "All"), 
+    sliderInput("select_rating", "Rentang Rating:", min = 0, max = 10, value = c(0, 10), step = 0.5)
   ),
   
   dashboardBody(
-    tags$head(
-      tags$style(HTML("
-    /* ===== READ MORE BUTTON ===== */
-    .toggle-btn {
-      color: #3c8dbc;
-      font-weight: 600;
-      cursor: pointer;
-      margin-left: 5px;
-    }
-    .toggle-btn:hover {
-      text-decoration: underline;
-    }
-    
-    /* ===== TABLE HEADER STYLE ===== */
-      table.dataTable thead th {
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-size: 12px;
-        font-weight: 700;
-        color: #374151;
-      }
-    
-    /* ===== ROW HOVER ===== */
-    table.dataTable tbody tr {
-    border-bottom: 1px solid #e5e7eb;
-    }
-    
-    /* ===== CELL SPACING ===== */
-      table.dataTable tbody td {
-        padding: 8px 12px;
-        font-size: 13px;
-      }
-
-    /* ===== GENRE BADGE ===== */
-    .genre-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      margin: 2px 4px 2px 0;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 999px;
-      color: white;
-    }
-    
-    /* ===== POP-UP DETAIL FILM ===== */
-    .modal-content {
-      border-radius: 14px;
-    }
-    
-    .modal-header {background-color: #f9fafb;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    
-    .modal-body {
-      font-size: 14px;
-      line-height: 1.6;
-    }
-    
-    .nav-tabs > li > a {
-      font-weight: 600;
-      color: #374151;
-    }
-
-    .nav-tabs > li.active > a {
-      background-color: #f3f4f6 !important;
-    }
-    
-    /* Scrollbar modern */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #d1d5db;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #9ca3af;
-    }
-
-  "))
-    ),
+    tags$head(tags$style(HTML("
+      .small-box { height: 110px; border-radius: 10px; }
+      .box { border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+      .genre-badge { display: inline-block; padding: 2px 8px; font-size: 11px; color: white; border-radius: 10px; font-weight: bold; }
+      .modal-lg { width: 90% !important; }
+    "))),
     
     tabItems(
-      # --- Tab 1: Overview ---
+
+      
+      # --- OVERVIEW ---
       tabItem(tabName = "overview",
               fluidRow(
                 valueBoxOutput("total_film", width = 4),
                 valueBoxOutput("avg_rating", width = 4),
                 valueBoxOutput("top_genre", width = 4)
               ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
               fluidRow(
                 box(title = "Distribusi Rating Film", status = "primary", solidHeader = TRUE, 
                     plotlyOutput("hist_rating"), width = 6),
                 box(title = "Tren Produksi Film per Tahun", status = "primary", solidHeader = TRUE, 
                     plotlyOutput("hist_year"), width = 6)
+              ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"),
+              
+              fluidRow(
+                box(title = "Top 10 Production Companies", status = "success", solidHeader = TRUE, 
+                    plotlyOutput("bar_top_studios"), width = 12)
               )
       ),
       
-      # --- Tab 2: Film Explorer ---
+     
+      # --- FILM EXPLORER ---
       tabItem(tabName = "explorer",
-              box(title = "Database Film", width = 12,
-                  DTOutput("table_explorer"))
+              box(title = "Database Film (Klik Baris untuk Detail)", width = 12, DTOutput("table_explorer"))
       ),
       
-      # --- Tab 3: Genre ---
+      
+      # --- GENRE ANALYSIS ---
       tabItem(tabName = "genre_tab",
               fluidRow(
-                box(title = "Populer Genre per Tahun", plotlyOutput("genre_year_trend"), width = 12)
+                box(title = "📈 Tren Top 5 Genre Per Tahun", status = "primary", solidHeader = TRUE, 
+                    plotlyOutput("genre_year_trend"), width = 12)
               ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
               fluidRow(
-                box(title = "Distribusi Rating dalam Genre", plotlyOutput("genre_rating_dist"), width = 6),
-                box(title = "Daftar Film Berdasarkan Filter", DTOutput("table_genre_year"), width = 6)
+                box(title = "🔥 Popularitas Genre (Total Reviews)", status = "danger", solidHeader = TRUE, 
+                    plotlyOutput("genre_pop_score"), width = 6),
+                box(title = "⏳ Karakteristik Durasi Per Genre", status = "warning", solidHeader = TRUE, 
+                    plotlyOutput("genre_duration_analisis"), width = 6)
+              ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
+              fluidRow(
+                box(title = "📊 Distribusi Rating Per Genre", status = "info", solidHeader = TRUE, 
+                    plotlyOutput("genre_rating_dist"), width = 6),
+                box(title = "📋 Daftar Film Terfilter", status = "success", solidHeader = TRUE, 
+                    DTOutput("table_genre_year"), width = 6)
               )
       ),
       
-      # --- Tab 4: Top Film ---
+      # --- TOP FILMS ---
       tabItem(tabName = "top_film",
               fluidRow(
-                box(title = "🏆 Top 5 Global (Minimal 100 Reviews)", width = 12, status = "danger", solidHeader = TRUE,
-                    uiOutput("poster_global_top")),
-                
-                box(title = textOutput("title_top_rating"), width = 12, status = "primary", solidHeader = TRUE,
-                    uiOutput("poster_genre_rating")),
-                
-                box(title = textOutput("title_top_reviews"), width = 12, status = "success", solidHeader = TRUE,
+                box(title = "🏆 Top 5 Global (Minimal 100 Reviews)", width = 12, status = "danger", solidHeader = TRUE, 
+                    uiOutput("poster_global_top"))
+              ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
+              fluidRow(
+                box(title = textOutput("title_top_rating"), width = 12, status = "primary", solidHeader = TRUE, 
+                    uiOutput("poster_genre_rating"))
+              ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
+              fluidRow(
+                box(title = textOutput("title_top_reviews"), width = 12, status = "success", solidHeader = TRUE, 
                     uiOutput("poster_genre_reviews"))
               ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
               fluidRow(
-                box(title = "Analisis Skor vs Popularitas (Bubble)", plotlyOutput("bar_top_5"), width = 7),
-                box(title = "Distribusi Genre dalam Filter (Donut)", plotlyOutput("wc_synopsis"), width = 5)
-              )
-      ),
+                box(title = "Analisis Skor vs Popularitas (Bubble)", status = "info", solidHeader = TRUE, width = 4,
+                    plotlyOutput("bubble_score_pop")),
+                box(title = "Proporsi Genre dalam Filter (Donut)", status = "warning", solidHeader = TRUE, width = 4,
+                    plotlyOutput("donut_genre_filter")),
+                box(title = "Kualitas Film dari Tahun ke Tahun", status = "primary", solidHeader = TRUE, width = 4,
+                    plotlyOutput("line_rating_trend"))
+              ),
+                
+                hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+                
+              fluidRow(
+                box(title = "💎 Hidden Gems (Rating Tinggi, Review Sedikit)", status = "info", solidHeader = TRUE, width = 4,
+                    plotlyOutput("plot_hidden_gems")),
+                box(title = "🔥 Movie Engagement (Popularitas vs Rating)", status = "danger", solidHeader = TRUE, width = 4,
+                    plotlyOutput("plot_engagement")),
+                box(title = "🎬 Top 5 Directors (High Consistent Rating)", status = "warning", solidHeader = TRUE, width = 4,
+                    plotlyOutput("plot_top_directors"))
+                )
+              ),
+
       
-      # --- Tab 5: Content Analysis ---
+      
+      # --- CONTENT ANALYSIS ---
       tabItem(tabName = "content",
               fluidRow(
-                # Box Atas: Tabel Film
-                box(title = "📌 Pilih Film untuk Analisis Kata", width = 12, status = "primary", solidHeader = TRUE,
-                    helpText("Klik pada baris film untuk melihat 15 kata kunci utama dari reviewnya."),
-                    div(style = "padding: 10px;", 
-                        DTOutput("table_content"))
-                )
+                box(title = "🔍 Pilih Film untuk Dianalisis", status = "primary", solidHeader = TRUE, width = 6,
+                    DTOutput("table_content_select")), 
+                box(title = "☁️ Wordcloud Review Pengguna", status = "danger", solidHeader = TRUE, width = 6,
+                    uiOutput("wordcloud_dynamic_area"))
               ),
-              fluidRow(
-                # Box Bawah: Wordcloud
-                box(title = textOutput("title_wc"), width = 12, status = "warning", solidHeader = TRUE,
-                    div(style = "background-color: white; padding: 10px;",
-                        wordcloud2Output("wc_review", height = "400px"))
-                )
-              )
-      ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
+              uiOutput("dynamic_sentiment_area")
+             ),
+            
       
-      # --- Tab 6: Relations ---
+      # --- VARIABLE RELATIONS ---
       tabItem(tabName = "relations",
               fluidRow(
-                box(title = "Rating vs Durasi", plotlyOutput("scatter_dur_rate"), width = 6),
-                box(title = "Rating Berdasarkan Director", plotlyOutput("box_dir_rate"), width = 6)
+                box(title = "🎯 Duration vs Rating", status = "warning", solidHeader = TRUE, width = 6,
+                    plotlyOutput("scatter_plot_dur", height = "350px")),
+                box(title = "🔥 Popularity vs Rating", status = "danger", solidHeader = TRUE, width = 6,
+                    plotlyOutput("scatter_popularity", height = "350px"))
               ),
+              
+              hr(style = "border-top: 1px solid #d2d6de; margin: 20px 0;"), 
+              
               fluidRow(
-                box(title = "Director vs Jumlah Review", plotlyOutput("bar_dir_review"), width = 12)
+                box(title = "🌡️ Variable Correlation Heatmap", status = "primary", solidHeader = TRUE, width = 12,
+                    plotlyOutput("corr_heatmap", height = "400px"),
+                    footer = "Makin kuning warnanya, makin kuat hubungannya, Boss Lady! ✨")
               )
       )
     )
