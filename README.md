@@ -183,6 +183,8 @@ Dashboard-Film/
 ├── images/             # Gambar dashboard
 │
 └── README.md
+
+
 <h2 id="tech">🛠 Teknologi yang Digunakan</h2>
 
 R Shiny – Framework dashboard interaktif
@@ -198,7 +200,7 @@ tidyverse – Manipulasi data
 ggplot2 – Visualisasi data
 
 Plotly – Grafik interaktif
-
+---
 <h2 id="tim">👥 Tim Pengembang</h2>
 
 Database Manager
@@ -220,18 +222,3 @@ Project ini dibuat sebagai tugas praktikum mata kuliah Pemrosesan Data Besar.
 
 ---
 
-✅ **Cara pakai:**
-
-1. Buka repo GitHub kamu  
-2. Klik **README.md**  
-3. Klik **Edit**  
-4. **Paste semua teks di atas**  
-5. Commit
-
-Commit message yang bagus:
-
-
-update README to follow project documentation structure
-
-
----
