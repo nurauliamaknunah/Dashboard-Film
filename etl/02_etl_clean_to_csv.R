@@ -1,6 +1,6 @@
 raw <- read.csv("data/raw/Dataset Film Raw.csv", stringsAsFactors = FALSE)
 
-dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
+dir.create("data/clean", recursive = TRUE, showWarnings = FALSE)
 
 clean_list <- function(x) {
   x <- as.character(x)
@@ -111,14 +111,14 @@ names(film_genres)[2] <- "genre_id"
 film_production_companies <- make_junction(raw$imdb_id, raw$production_companies, production_companies, "company_name", "company_id")
 names(film_production_companies)[2] <- "company_id"
 
-write.csv(users, "data/processed/users.csv", row.names = FALSE)
-write.csv(films, "data/processed/films.csv", row.names = FALSE)
-write.csv(reviews, "data/processed/reviews.csv", row.names = FALSE)
-write.csv(actors, "data/processed/actors.csv", row.names = FALSE)
-write.csv(directors, "data/processed/directors.csv", row.names = FALSE)
-write.csv(genres, "data/processed/genres.csv", row.names = FALSE)
-write.csv(production_companies, "data/processed/production_companies.csv", row.names = FALSE)
-write.csv(film_actors, "data/processed/film_actors.csv", row.names = FALSE)
-write.csv(film_directors, "data/processed/film_directors.csv", row.names = FALSE)
-write.csv(film_genres, "data/processed/film_genres.csv", row.names = FALSE)
-write.csv(film_production_companies, "data/processed/film_production_companies.csv", row.names = FALSE)
+write.csv(users, "data/clean/users.csv", row.names = FALSE)
+write.csv(films, "data/clean/films.csv", row.names = FALSE)
+write.csv(reviews, "data/clean/reviews.csv", row.names = FALSE)
+write.csv(actors, "data/clean/actors.csv", row.names = FALSE)
+write.csv(directors, "data/clean/directors.csv", row.names = FALSE)
+write.csv(genres, "data/clean/genres.csv", row.names = FALSE)
+write.csv(production_companies, "data/clean/production_companies.csv", row.names = FALSE)
+write.csv(film_actors, "data/clean/film_actors.csv", row.names = FALSE)
+write.csv(film_directors, "data/clean/film_directors.csv", row.names = FALSE)
+write.csv(film_genres, "data/clean/film_genres.csv", row.names = FALSE)
+write.csv(film_production_companies, "data/clean/film_production_companies.csv", row.names = FALSE)
