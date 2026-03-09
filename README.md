@@ -1,4 +1,4 @@
-![Header Dashboard Film](images/Header%20Dashboard%20Film.png)
+<img width="4688" height="1563" alt="Header Dashboard Film" src="https://github.com/user-attachments/assets/7ccb5cc2-6395-4f67-a0f3-d6fab171f5ce" />
 
 <h1 align="center">🎬 <b>Selamat Datang di Dashboard Film!</b> 🚀🍿</h1>
 
