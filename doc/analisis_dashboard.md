@@ -12,7 +12,8 @@ Indikator ini menampilkan jumlah total film yang terdapat dalam database.
 
 Nilai ini dihitung menggunakan query SQL berikut:
 
-SELECT COUNT(*) FROM films;
+SELECT COUNT(*) AS total_film
+FROM films;
 
 Tujuan indikator ini adalah memberikan gambaran umum mengenai jumlah data film yang tersedia dalam sistem.
 
@@ -20,19 +21,22 @@ Tujuan indikator ini adalah memberikan gambaran umum mengenai jumlah data film y
 
 # 2. Rata-rata Rating Film
 
-Indikator ini menunjukkan rata-rata rating film berdasarkan ulasan pengguna.
+Indikator ini menunjukkan rata-rata rating film berdasarkan data rating IMDb.
 
 Query yang digunakan:
 
-SELECT AVG(rating) FROM reviews;
+SELECT AVG(rating_imdb) AS avg_rating
+FROM films;
 
-Nilai rata-rata rating membantu menggambarkan kualitas film secara umum berdasarkan penilaian pengguna.
+Nilai rata-rata rating membantu menggambarkan kualitas film secara umum berdasarkan data rating yang tersedia pada database.
 
 ---
 
 # 3. Genre Terpopuler
 
 Analisis ini menampilkan genre dengan jumlah film terbanyak.
+
+Karena satu film dapat memiliki lebih dari satu genre, perhitungan dilakukan melalui tabel relasi `film_genres` dan tabel `genres`.
 
 Query yang digunakan:
 
@@ -42,7 +46,7 @@ JOIN genres g ON fg.genre_id = g.genre_id
 GROUP BY g.genre_name
 ORDER BY total_film DESC;
 
-Visualisasi ini membantu pengguna mengetahui genre film yang paling banyak diproduksi atau paling populer dalam dataset.
+Visualisasi ini membantu pengguna mengetahui genre film yang paling dominan dalam dataset.
 
 ---
 
@@ -50,12 +54,12 @@ Visualisasi ini membantu pengguna mengetahui genre film yang paling banyak dipro
 
 Distribusi rating film ditampilkan menggunakan grafik histogram.
 
-Grafik ini menunjukkan bagaimana penyebaran nilai rating film dalam dataset.
+Grafik ini menunjukkan bagaimana penyebaran nilai `rating_imdb` dalam dataset.
 
 Analisis ini membantu mengetahui:
 
 - apakah mayoritas film memiliki rating tinggi
-- apakah terdapat film dengan rating sangat rendah
+- apakah terdapat film dengan rating rendah
 - bagaimana pola distribusi kualitas film secara keseluruhan
 
 ---
@@ -71,34 +75,32 @@ FROM films
 GROUP BY YEAR(release_date)
 ORDER BY year;
 
-Visualisasi tren produksi film membantu melihat perkembangan industri film dari waktu ke waktu.
+Visualisasi tren produksi film membantu melihat perkembangan jumlah film dari waktu ke waktu.
 
 ---
 
-# 6. Top Film Berdasarkan Rating
+# 6. Top Film Berdasarkan Rating IMDb
 
-Dashboard juga menampilkan film dengan rating tertinggi.
+Dashboard juga menampilkan film dengan rating IMDb tertinggi.
 
 Query yang digunakan:
 
-SELECT title, AVG(rating) AS avg_rating
-FROM reviews r
-JOIN films f ON r.film_id = f.film_id
-GROUP BY title
-ORDER BY avg_rating DESC
+SELECT title, rating_imdb
+FROM films
+ORDER BY rating_imdb DESC
 LIMIT 5;
 
-Analisis ini membantu pengguna menemukan film yang memiliki penilaian terbaik dari pengguna.
+Analisis ini membantu pengguna menemukan film dengan rating tertinggi berdasarkan data IMDb.
 
 ---
 
 # 7. Hubungan Durasi Film dan Rating
 
-Dashboard juga dapat menampilkan hubungan antara durasi film dan rating.
+Dashboard juga dapat menampilkan hubungan antara durasi film dan rating IMDb.
 
 Visualisasi ini biasanya menggunakan scatter plot.
 
-Analisis ini bertujuan untuk mengetahui apakah terdapat hubungan antara durasi film dan tingkat penilaian pengguna terhadap film tersebut.
+Analisis ini bertujuan untuk mengetahui apakah terdapat hubungan antara durasi film (`duration_min`) dan tingkat rating film (`rating_imdb`).
 
 ---
 
@@ -107,7 +109,7 @@ Analisis ini bertujuan untuk mengetahui apakah terdapat hubungan antara durasi f
 Berdasarkan analisis dashboard, pengguna dapat memperoleh informasi penting mengenai:
 
 - jumlah film dalam database
-- kualitas film berdasarkan rating pengguna
+- kualitas film berdasarkan rating IMDb
 - genre film yang paling dominan
 - perkembangan produksi film dari waktu ke waktu
 - film dengan rating tertinggi
