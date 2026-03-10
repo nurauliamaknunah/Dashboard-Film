@@ -193,17 +193,3 @@ Bertanggung jawab dalam dokumentasi analisis, pembahasan database, definisi KPI,
 Project ini dibuat sebagai tugas praktikum mata kuliah Pemrosesan Data Besar.
 
 ---
-
-# Kenapa versi ini lebih aman
-
-README ini sudah:
-- pakai **nama database final**: `db_bioskop`
-- pakai **schema final**: `imdb_id`, `rating_imdb`, `duration_min`
-- nyebut file dokumentasi yang memang sudah ada
-- nyebut struktur folder yang sesuai repo final
-- tidak bergantung pada screenshot yang mungkin belum ada
-
-Commit message yang bagus:
-
-```text
-revise README to match final project structure
