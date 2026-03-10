@@ -8,13 +8,12 @@ Dokumen ini menjelaskan Key Performance Indicators (KPI) yang digunakan dalam da
 
 KPI ini menunjukkan jumlah total film yang tersedia dalam database.
 
-Tujuan indikator ini adalah memberikan gambaran umum mengenai ukuran dataset yang digunakan dalam sistem dashboard.
-
-Nilai ini dihitung dari seluruh data film yang tersimpan pada tabel films.
+Nilai ini dihitung dari seluruh data film yang tersimpan pada tabel `films`.
 
 Query yang digunakan:
 
-SELECT COUNT(*) FROM films;
+SELECT COUNT(*) AS total_film
+FROM films;
 
 Insight yang diperoleh:
 - Menunjukkan jumlah film yang tersedia dalam sistem
@@ -24,16 +23,17 @@ Insight yang diperoleh:
 
 # 2. Rata-rata Rating Film
 
-KPI ini menunjukkan nilai rata-rata rating film berdasarkan ulasan yang diberikan oleh pengguna.
+KPI ini menunjukkan nilai rata-rata rating film berdasarkan data rating IMDb.
 
-Nilai ini dihitung dari seluruh rating yang terdapat pada tabel reviews.
+Nilai ini dihitung dari kolom `rating_imdb` pada tabel `films`.
 
 Query yang digunakan:
 
-SELECT AVG(rating) FROM reviews;
+SELECT AVG(rating_imdb) AS avg_rating
+FROM films;
 
 Insight yang diperoleh:
-- Menunjukkan kualitas film secara umum berdasarkan penilaian pengguna
+- Menunjukkan kualitas film secara umum berdasarkan rating IMDb
 - Memberikan gambaran apakah mayoritas film memiliki rating tinggi atau rendah
 
 ---
@@ -42,18 +42,19 @@ Insight yang diperoleh:
 
 KPI ini menunjukkan genre film yang paling banyak muncul dalam dataset.
 
-Genre dengan jumlah film terbanyak dianggap sebagai genre yang paling dominan atau populer.
+Karena satu film dapat memiliki lebih dari satu genre, perhitungan dilakukan melalui tabel relasi `film_genres` dan tabel master `genres`.
 
 Query yang digunakan:
 
-SELECT genre, COUNT(*) AS total_film
-FROM films
-GROUP BY genre
+SELECT g.genre_name, COUNT(*) AS total_film
+FROM film_genres fg
+JOIN genres g ON fg.genre_id = g.genre_id
+GROUP BY g.genre_name
 ORDER BY total_film DESC;
 
 Insight yang diperoleh:
-- Mengetahui genre yang paling banyak diproduksi
-- Membantu memahami preferensi pasar terhadap jenis film tertentu
+- Mengetahui genre yang paling dominan dalam dataset
+- Membantu memahami kecenderungan kategori film yang paling sering muncul
 
 ---
 
@@ -71,34 +72,32 @@ GROUP BY YEAR(release_date)
 ORDER BY tahun;
 
 Insight yang diperoleh:
-- Mengetahui tahun dengan produksi film terbanyak
-- Mengidentifikasi tren pertumbuhan atau penurunan produksi film
+- Mengetahui tahun dengan jumlah rilis film terbanyak
+- Mengidentifikasi pola pertumbuhan atau penurunan jumlah film
 
 ---
 
-# 5. Top Film Berdasarkan Rating
+# 5. Top Film Berdasarkan Rating IMDb
 
-KPI ini menampilkan film dengan rating tertinggi berdasarkan ulasan pengguna.
+KPI ini menampilkan film dengan rating IMDb tertinggi.
 
-Film dengan rating rata-rata tertinggi dianggap sebagai film terbaik menurut pengguna.
+Film dengan nilai `rating_imdb` tertinggi dianggap sebagai film dengan performa terbaik berdasarkan data yang tersedia.
 
 Query yang digunakan:
 
-SELECT title, AVG(rating) AS avg_rating
-FROM reviews r
-JOIN films f ON r.film_id = f.film_id
-GROUP BY title
-ORDER BY avg_rating DESC
+SELECT title, rating_imdb
+FROM films
+ORDER BY rating_imdb DESC
 LIMIT 5;
 
 Insight yang diperoleh:
-- Mengetahui film dengan kualitas terbaik menurut pengguna
-- Membantu pengguna menemukan rekomendasi film dengan rating tinggi
+- Mengetahui film dengan rating tertinggi
+- Membantu pengguna menemukan rekomendasi film terbaik
 
 ---
 
 # Kesimpulan
 
-KPI yang digunakan dalam dashboard ini membantu pengguna memahami berbagai aspek penting dalam data film, seperti jumlah film, kualitas film berdasarkan rating, genre yang dominan, tren produksi film, serta film dengan rating tertinggi.
+KPI yang digunakan dalam dashboard ini membantu pengguna memahami berbagai aspek penting dalam data film, seperti jumlah film, kualitas film berdasarkan rating IMDb, genre yang dominan, tren produksi film, serta film dengan rating tertinggi.
 
 Melalui KPI ini, dashboard dapat memberikan insight yang lebih jelas dan membantu pengguna dalam mengeksplorasi data film secara interaktif.
