@@ -1,4 +1,4 @@
-<img width="4688" height="1563" alt="Header Dashboard Film" src="https://github.com/user-attachments/assets/7ccb5cc2-6395-4f67-a0f3-d6fab171f5ce" />
+![Header Dashboard Film](images/Header%20Dashboard%20Film.png)
 
 <h1 align="center">🎬 <b>Selamat Datang di Dashboard Film!</b> 🚀🍿</h1>
 
@@ -9,216 +9,201 @@
 ## 📑 Menu
 
 - [📌 Informasi](#informasi)
-- [📋 Tentang Project](#tentang)
-- [📷 Screenshot Tampilan](#screenshot)
-- [💾 Skema Basis Data](#database)
+- [📋 Tentang Project](#tentang-project)
+- [💾 Skema Basis Data](#skema-basis-data)
 - [🔗 ERD](#erd)
-- [📜 Deskripsi Data](#deskripsi)
-- [📂 Struktur Folder](#folder)
-- [🛠 Teknologi yang Digunakan](#tech)
-- [👥 Tim Pengembang](#tim)
+- [📜 Dokumentasi Analisis](#dokumentasi-analisis)
+- [📂 Struktur Folder](#struktur-folder)
+- [🛠 Teknologi yang Digunakan](#teknologi-yang-digunakan)
+- [👥 Tim Pengembang](#tim-pengembang)
 
 ---
 
-<h2 id="informasi">📌 Informasi</h2>
+## 📌 Informasi
 
-🎬 **Dashboard Film - Platform Analisis Data Film**
+**Dashboard Film** adalah platform analisis data film berbasis **R Shiny** yang dirancang untuk membantu pengguna mengeksplorasi informasi film melalui visualisasi data interaktif.
 
-Platform ini memungkinkan pengguna untuk mengeksplorasi informasi film melalui visualisasi data interaktif menggunakan **R Shiny**.
+Dashboard ini memungkinkan pengguna untuk:
 
-Pengguna dapat:
-
-- Menelusuri film berdasarkan genre
-- Melihat distribusi rating film
-- Menemukan film dengan rating tertinggi
-- Melihat tren produksi film berdasarkan tahun rilis
-- Membaca ulasan film dari pengguna lain
+- melihat jumlah film dalam database
+- melihat rata-rata rating film
+- menemukan genre yang paling dominan
+- menganalisis tren produksi film berdasarkan tahun rilis
+- mengeksplorasi film dengan rating tertinggi
+- membaca dokumentasi struktur database dan analisis data
 
 ---
 
-<h2 id="tentang">📋 Tentang Project</h2>
+## 📋 Tentang Project
 
 Project ini dibuat sebagai bagian dari praktikum **Pemrosesan Data Besar**.
 
-Tujuan utama proyek ini adalah:
+Tujuan utama project ini adalah:
 
-1. Merancang **database relasional** untuk dataset film.
-2. Melakukan **normalisasi database hingga Third Normal Form (3NF)**.
-3. Mengembangkan **dashboard interaktif menggunakan R Shiny**.
-4. Menyediakan visualisasi untuk membantu eksplorasi data film.
+1. Merancang database relasional untuk dataset film
+2. Melakukan normalisasi database hingga **Third Normal Form (3NF)**
+3. Mengembangkan dashboard interaktif menggunakan **R Shiny**
+4. Menyediakan dokumentasi analisis dan struktur database yang mendukung pengambilan insight dari data film
 
-Database mencakup beberapa entitas seperti:
+Database yang digunakan mencakup beberapa entitas utama seperti:
 
-- Film
-- Aktor
-- Sutradara
-- Genre
-- Perusahaan produksi
-- Pengguna
-- Review film
+- films
+- users
+- reviews
+- actors
+- directors
+- genres
+- production_companies
 
----
-
-<h2 id="screenshot">📷 Screenshot Tampilan</h2>
-
-### 1️⃣ Halaman Dashboard
-
-Menampilkan ringkasan statistik film seperti:
-
-- Total film
-- Rata-rata rating
-- Genre terpopuler
-- Distribusi rating film
-
-![](images/dashboard.png)
-
----
-
-### 2️⃣ Halaman Daftar Film
-
-Pengguna dapat:
-
-- Menelusuri film
-- Melihat informasi film
-- Menggunakan filter genre dan rating
-
-![](images/movie.png)
-
----
-
-### 3️⃣ Halaman Review Film
-
-Menampilkan ulasan pengguna terhadap film.
-
-Informasi yang ditampilkan:
-
-- Nama pengguna
-- Rating
-- Komentar
-- Tanggal review
-
-![](images/review.png)
-
----
-
-<h2 id="database">💾 Skema Basis Data</h2>
-
-Database dirancang menggunakan model relasional dengan beberapa entitas utama:
-
-- **films**
-- **users**
-- **reviews**
-- **actors**
-- **directors**
-- **genres**
-- **production_companies**
-
-Relasi many-to-many direpresentasikan melalui tabel penghubung seperti:
+Relasi many-to-many direpresentasikan menggunakan tabel penghubung seperti:
 
 - film_actors
 - film_directors
 - film_genres
 - film_production_companies
 
-Struktur database dirancang untuk menjaga **integritas referensial dan konsistensi data**.
-
 ---
 
-<h2 id="erd">🔗 ERD</h2>
+## 💾 Skema Basis Data
 
-ERD (Entity Relationship Diagram) menjelaskan hubungan antar entitas dalam database.
+Database dibangun menggunakan **MySQL** dengan nama basis data:
 
-![](doc/ERD.png)
-
-### 🌐 Relasi Antar Entitas
-
-| Hubungan | Penjelasan |
-|--------|--------|
-| Film → Director (1:N) | Satu sutradara dapat menyutradarai banyak film |
-| Film → Actor (M:N) | Film dapat memiliki banyak aktor |
-| Film → Genre (M:N) | Film dapat memiliki lebih dari satu genre |
-| Film → Review (1:N) | Film dapat memiliki banyak ulasan |
-| User → Review (1:N) | Satu user dapat memberikan banyak ulasan |
-
----
-
-<h2 id="deskripsi">📜 Deskripsi Data</h2>
-
-Database dibuat menggunakan **MySQL**.
+`db_bioskop`
 
 Contoh pembuatan database:
 
 ```sql
-CREATE DATABASE film_dashboard;
-USE film_dashboard;
+CREATE DATABASE IF NOT EXISTS db_bioskop;
+USE db_bioskop;
 
-Contoh pembuatan tabel film:
-
+Contoh pembuatan tabel films:
 CREATE TABLE films (
-  film_id INT PRIMARY KEY,
+  imdb_id VARCHAR(20) PRIMARY KEY,
   title VARCHAR(255),
+  rating_imdb DOUBLE,
+  rating_count INT,
+  storyline TEXT,
+  certificates TEXT,
   release_date DATE,
-  duration INT
+  duration_min INT,
+  imdb_url_film TEXT,
+  url_poster TEXT
 );
 
 Struktur lengkap tabel dapat dilihat pada file:
 
 connection/ddl.sql
-<h2 id="folder">📂 Struktur Folder</h2>
+
+🔗 ERD
+
+ERD (Entity Relationship Diagram) menjelaskan hubungan antar entitas dalam database Dashboard Film.
+
+File ERD tersedia pada folder:
+
+doc/ERD.png
+
+Relasi utama dalam database ini meliputi:
+
+Hubungan	Penjelasan
+Film → Review (1:N)	Satu film dapat memiliki banyak review
+User → Review (1:N)	Satu user dapat memberikan banyak review
+Film → Actor (M:N)	Satu film dapat memiliki banyak aktor
+Film → Director (M:N)	Satu film dapat memiliki lebih dari satu sutradara
+Film → Genre (M:N)	Satu film dapat memiliki lebih dari satu genre
+Film → Production Company (M:N)	Satu film dapat diproduksi oleh lebih dari satu perusahaan
+📜 Dokumentasi Analisis
+
+Dokumentasi yang mendukung project ini tersedia pada folder doc/, yaitu:
+
+pembahasan.md → pembahasan umum project dashboard film
+
+data_dictionary.md → penjelasan struktur tabel dan atribut database
+
+normalisasi_database.md → penjelasan proses normalisasi hingga 3NF
+
+analisis_dashboard.md → pembahasan KPI dan analisis dashboard
+
+kpi_dashboard.md → definisi KPI utama yang digunakan dalam dashboard
+
+Dokumentasi ini dibuat untuk memastikan bahwa struktur database, analisis, dan dashboard saling konsisten.
+
+📂 Struktur Folder
+
 Dashboard-Film/
 │
-├── app/                # Aplikasi dashboard R Shiny
+├── app/                         # Kode aplikasi dashboard R Shiny
 │   ├── app.R
 │   ├── ui.R
 │   └── server.R
 │
-├── connection/         # Konfigurasi database
-│   ├── db_setup.R
+├── connection/                  # Koneksi database dan query SQL
+│   ├── db_connection.R
 │   ├── ddl.sql
 │   └── queries.sql
 │
-├── doc/                # Dokumentasi proyek
-│   └── ERD.png
+├── etl/                         # Proses ETL data
+│   ├── 01_load_raw_to_db.R
+│   ├── 02_etl_clean_to_csv.R
+│   └── 03_load_processed_to_db.R
 │
-├── images/             # Gambar dashboard
+├── data/
+│   ├── raw/                     # Data mentah
+│   └── clean/                   # Data hasil pembersihan
+│
+├── doc/                         # Dokumentasi project
+│   ├── ERD.png
+│   ├── analisis_dashboard.md
+│   ├── data_dictionary.md
+│   ├── kpi_dashboard.md
+│   ├── normalisasi_database.md
+│   └── pembahasan.md
+│
+├── images/                      # Gambar pendukung project
 │
 └── README.md
 
+🛠 Teknologi yang Digunakan
 
-<h2 id="tech">🛠 Teknologi yang Digunakan</h2>
+R Shiny – framework untuk membangun dashboard interaktif
 
-R Shiny – Framework dashboard interaktif
+MySQL – sistem manajemen basis data
 
-ShinyDashboard / bs4Dash – UI dashboard
+DBI / RMySQL – koneksi database dari R
 
-MySQL – Database
+tidyverse – manipulasi data
 
-DBI & RMySQL – Koneksi database
+ggplot2 – visualisasi data
 
-tidyverse – Manipulasi data
-
-ggplot2 – Visualisasi data
-
-Plotly – Grafik interaktif
----
-<h2 id="tim">👥 Tim Pengembang</h2>
+👥 Tim Pengembang
 
 Database Manager
-Mengelola struktur database, integritas data, dan performa database.
+Bertanggung jawab dalam perancangan struktur database, DDL, dan pengelolaan integritas data.
 
 Backend Developer
-Mengembangkan query database dan integrasi dengan dashboard.
+Bertanggung jawab dalam integrasi query database dengan dashboard serta logika server.
 
 Frontend Developer
-Mendesain tampilan dashboard agar interaktif dan user-friendly.
+Bertanggung jawab dalam membangun tampilan dashboard yang interaktif dan mudah digunakan.
 
 Data Analyst
-Menyusun dokumentasi analisis data, mendefinisikan KPI, serta memastikan konsistensi antara database dan dashboard.
+Bertanggung jawab dalam dokumentasi analisis, pembahasan database, definisi KPI, serta validasi konsistensi antara dashboard dan database.
 
 📜 Lisensi
 
 Project ini dibuat sebagai tugas praktikum mata kuliah Pemrosesan Data Besar.
 
-
 ---
 
+# Kenapa versi ini lebih aman
+
+README ini sudah:
+- pakai **nama database final**: `db_bioskop`
+- pakai **schema final**: `imdb_id`, `rating_imdb`, `duration_min`
+- nyebut file dokumentasi yang memang sudah ada
+- nyebut struktur folder yang sesuai repo final
+- tidak bergantung pada screenshot yang mungkin belum ada
+
+Commit message yang bagus:
+
+```text
+revise README to match final project structure
