@@ -10,6 +10,7 @@
 
 - [📌 Informasi](#-informasi)
 - [📋 Tentang Project](#-tentang-project)
+- [📷 Screenshot Tampilan](#screenshot)
 - [💾 Skema Basis Data](#-skema-basis-data)
 - [🔗 ERD](#-erd)
 - [📜 Dokumentasi Analisis](#-dokumentasi-analisis)
@@ -64,6 +65,79 @@ Relasi many-to-many direpresentasikan menggunakan tabel penghubung seperti:
 
 ---
 
+## 📷 Screenshot Tampilan
+
+1.  **Tampilan Menu Utama atau Overview**
+
+    -   Menampilkan jumlah film terpilih, rata-rata rating, dan genre aktif berdasarkan filter.
+    -   Menampilkan distribusi rating film dalam bentuk histogram.
+    -   Menampilkan tren produksi film per tahun.
+    -   Menampilkan daftar perusahaan produksi teratas.
+
+    ![](images/overview_dashboard.png)
+
+2.  **Daftar Film atau Film Explorer**
+
+    -   Pengguna dapat menelusuri film yang tersedia melalui tabel interaktif.
+    -   Informasi yang ditampilkan meliputi judul, genre, sutradara, rating, jumlah review, durasi, dan tanggal rilis.
+    -   Tersedia fitur pencarian untuk menemukan film dengan cepat.
+    -   Pengguna dapat klik salah satu film untuk melihat detail lebih lanjut.
+
+    ![](images/film_explorer.png)
+
+3.  **Detail Film**
+
+    -   Menampilkan informasi lengkap dari film yang dipilih.
+    -   Informasi yang ditampilkan mencakup sinopsis, sutradara, genre, durasi, dan rating film.
+    -   Membantu pengguna memahami isi film secara lebih detail sebelum melihat review.
+
+    ![](images/detail_film.png)
+
+4.  **Tampilan Analisis Genre atau Genre Analysis**
+
+    -   Menampilkan tren top 5 genre per tahun.
+    -   Menampilkan popularitas genre berdasarkan total review.
+    -   Menampilkan karakteristik durasi rata-rata untuk setiap genre.
+    -   Menampilkan distribusi rating film berdasarkan genre.
+    -   Menyediakan daftar film hasil filter genre.
+
+    ![](images/genre_analysis.png)
+
+5.  **Tampilan Film Teratas atau Top Films**
+
+    -   Menampilkan top 5 film global dengan minimal 100 review.
+    -   Menampilkan top 5 film dengan rating tertinggi berdasarkan genre.
+    -   Menampilkan top 5 film dengan review terbanyak berdasarkan genre.
+    -   Membantu pengguna menemukan film terbaik dan paling populer.
+
+    ![](images/top_films.png)
+
+6.  **Tampilan Content Analysis**
+
+    -   Menampilkan wordcloud review pengguna.
+    -   Menampilkan sentiment score.
+    -   Menampilkan perbandingan kata positif dan negatif.
+    -   Menampilkan featured review untuk film yang dipilih.
+
+    ![](images/content_analysis_review.png)
+
+7.  **Tampilan Review Pengguna**
+
+    -   Menampilkan daftar review pengguna untuk film yang dipilih.
+    -   Informasi review mencakup username, ringkasan review, dan isi review.
+    -   Membantu pengguna memahami opini penonton terhadap film tersebut.
+
+    ![](images/review_pengguna.png)
+
+8. **Tampilan Hubungan Antar Variabel atau Variable Relations**
+
+    -   Menampilkan hubungan antara durasi film dan rating.
+    -   Menampilkan hubungan antara popularitas film dan rating.
+    -   Menampilkan heatmap korelasi antar variabel numerik.
+    -   Membantu pengguna memahami pola hubungan antar variabel pada data film.
+
+    ![](images/variable_relations.png)
+   
 ## 💾 Skema Basis Data
 
 Database dibangun menggunakan **MySQL** dengan nama basis data:
