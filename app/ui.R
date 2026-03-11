@@ -15,9 +15,18 @@ library(tm)
 
 ui <- dashboardPage(
   skin = "black",
-  dashboardHeader(title = "POPCORN 🎬"),
+  dashboardHeader(
+    title = span(
+      tagList(
+        icon("film", style = "margin-right: 5px; color: #ffce00;"), 
+        span("POPCORN", style = "font-weight: 900; letter-spacing: 2px; color: white; font-family: 'Montserrat', sans-serif;")
+      )
+    ),
+    titleWidth = 250
+  ),
   
   dashboardSidebar(
+    width = 250,
     sidebarMenu(
       menuItem("Overview", tabName = "overview", icon = icon("dashboard")),
       menuItem("Film Explorer", tabName = "explorer", icon = icon("table")),
@@ -26,20 +35,34 @@ ui <- dashboardPage(
       menuItem("Content Analysis", tabName = "content", icon = icon("align-left")),
       menuItem("Variable Relations", tabName = "relations", icon = icon("chart-line"))
     ),
-    
     hr(),
-    
-    selectInput("select_genre", "Pilih Genre:", choices = "All"), 
-    sliderInput("select_rating", "Rentang Rating:", min = 0, max = 10, value = c(0, 10), step = 0.5)
+
+    div(style = "padding: 0 15px;", 
+        selectInput("select_genre", "Pilih Genre:", choices = "All"), 
+        sliderInput("select_rating", "Rentang Rating:", min = 0, max = 10, value = c(0, 10), step = 0.5)
+    )
   ),
   
   dashboardBody(
-    tags$head(tags$style(HTML("
-      .small-box { height: 110px; border-radius: 10px; }
-      .box { border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-      .genre-badge { display: inline-block; padding: 2px 8px; font-size: 11px; color: white; border-radius: 10px; font-weight: bold; }
-      .modal-lg { width: 90% !important; }
-    "))),
+    tags$head(
+      tags$style(HTML("
+        /* Header & Logo */
+        .main-header .logo { background-color: #e67e22 !important; transition: background-color 0.3s; }
+        .main-header .logo:hover { background-color: #d35400 !important; }
+        .main-header .navbar { background-color: #e67e22 !important; }
+        
+        /* Sidebar Styling */
+        .main-sidebar { background-color: #2c3e50 !important; }
+        .sidebar-menu > li.active > a { border-left: 4px solid #ffce00 !important; background-color: #34495e !important; }
+        .sidebar-menu > li > a:hover { background-color: #3e5871 !important; color: #ffce00 !important; }
+        
+        /* Box & UI Elements */
+        .small-box { height: 110px; border-radius: 10px; }
+        .box { border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .genre-badge { display: inline-block; padding: 2px 8px; font-size: 11px; color: white; border-radius: 10px; font-weight: bold; }
+        .modal-lg { width: 90% !important; }
+      "))
+    ),
     
     tabItems(
 
@@ -183,3 +206,5 @@ ui <- dashboardPage(
     )
   )
 )
+
+

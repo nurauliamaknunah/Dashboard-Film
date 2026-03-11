@@ -144,7 +144,7 @@ Database dibangun menggunakan **MySQL** dengan nama basis data:
 
 `db_bioskop`
 
-Contoh pembuatan database:
+normalisasi_database.md → penjelasan proses normalisasi hingga 3NF
 
 ```sql
 CREATE DATABASE IF NOT EXISTS db_bioskop;
@@ -168,7 +168,7 @@ CREATE TABLE films (
 );
 ```
 
-Struktur lengkap tabel dapat dilihat pada file:
+📂 Struktur Folder
 
 `connection/ddl.sql`
 
