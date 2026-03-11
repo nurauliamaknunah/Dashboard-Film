@@ -74,7 +74,7 @@ Relasi many-to-many direpresentasikan menggunakan tabel penghubung seperti:
     -   Menampilkan tren produksi film per tahun.
     -   Menampilkan daftar perusahaan produksi teratas.
 
-    ![](images/overview_dashboard.png)
+    ![](images/overview_dashboard.pngoverview_dashboard.png)
 
 2.  **Daftar Film atau Film Explorer**
 
