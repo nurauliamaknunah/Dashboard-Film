@@ -1,8 +1,8 @@
 ![Header Dashboard Film](images/Header%20Dashboard%20Film.png)
 
-<h1 align="center">🎬 <b>Selamat Datang di Dashboard Film!</b> 🚀🍿</h1>
+<h1 align="center">🍿 <b>Selamat Datang di POPCORN!</b> 🎬🚀</h1>
 
-<h2 align="center"><i>"Explore Movies Through Data"</i></h2>
+<h2 align="center"><i>"Platform Observasi Performa dan Catatan Rating Cinema"</i></h2>
 
 ---
 
@@ -21,7 +21,7 @@
 
 ## 📌 Informasi
 
-**Dashboard Film** adalah platform analisis data film berbasis **R Shiny** yang dirancang untuk membantu pengguna mengeksplorasi informasi film melalui visualisasi data interaktif.
+**POPCORN** adalah platform analisis data film berbasis **R Shiny** yang dirancang untuk membantu pengguna mengeksplorasi informasi film melalui visualisasi data interaktif.
 
 Dashboard ini memungkinkan pengguna untuk:
 
@@ -187,20 +187,20 @@ Dashboard-Film/
 
 ## 👥 Tim Pengembang
 
-- **Database Manager**  
+- **Database Manager: Lilik Avitadia Prichanti (M0501251031)**  
   Bertanggung jawab dalam perancangan struktur database, DDL, dan pengelolaan integritas data.
 
-- **Backend Developer**  
+- **Backend Developer: Sigap Abror Falah (M0501251013)**  
   Bertanggung jawab dalam integrasi query database dengan dashboard serta logika server.
 
-- **Frontend Developer**  
+- **Frontend Developer: Nur Aulia Maknunah (M0501251009)**  
   Bertanggung jawab dalam membangun tampilan dashboard yang interaktif dan mudah digunakan.
 
-- **Data Analyst**  
+- **Data Analyst: Arnedi Rizki Adidharma (M0501251040)**  
   Bertanggung jawab dalam dokumentasi analisis, pembahasan database, definisi KPI, serta validasi konsistensi antara dashboard dan database.
-
+  
 ---
 
 ## 📜 Lisensi
 
-Project ini dibuat sebagai tugas praktikum mata kuliah **Pemrosesan Data Besar**.
+Project **POPCORN** dibuat sebagai bagian dari praktikum **Pemrosesan Data Besar**.
