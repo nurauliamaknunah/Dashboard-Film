@@ -104,9 +104,7 @@ Struktur lengkap tabel dapat dilihat pada file:
 
 ERD (*Entity Relationship Diagram*) menjelaskan hubungan antar entitas dalam database Dashboard Film.
 
-File ERD tersedia pada folder:
-
-`doc/ERD.png`
+![](doc/ERD.png)
 
 Relasi utama dalam database ini meliputi:
 
